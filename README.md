@@ -2550,6 +2550,17 @@ Closed / done todos can be listed with [`nb todos closed`](#todo):
 [sample:1] ✅ [x] Sample todo one.
 ```
 
+To hide done todos from the regular item list, use the `--exclude-done` option
+with [`nb ls`](#ls) or [`nb list`](#list):
+
+```bash
+# list items in the current notebook, excluding done todos
+❯ nb ls --exclude-done
+[6] ✔️ [ ] Example todo six.
+[4] ✔️ [ ] Example todo four.
+[1] ✔️ [ ] Example todo one.
+```
+
 See
 [`nb help todo`](#todo)
 for more information.
@@ -6145,14 +6156,15 @@ Usage:
   nb import notebook <path> [<name>]
   nb init [<remote-url> [<branch>]] [--author] [--email <email>]
           [--name <name>]
-  nb list [-e [<length>] | --excerpt [<length>]] [--filenames]
-          [-f | --folders-first] [-n <limit> | --limit <limit> | --<limit>]
+  nb list [-e [<length>] | --excerpt [<length>]] [--exclude-done]
+          [--filenames] [-f | --folders-first]
+          [-n <limit> | --limit <limit> | --<limit>]
           [--no-id] [--no-indicator] [-p <number> | --page <number>] [--pager]
           [--paths] [-s | --sort] [-r | --reverse] [--tags]
           [-t <type> | --type <type> | --<type>]
           [<notebook>:][<folder-path>/][<id> | <filename> | <path> | <query>]
   nb ls [-a | --all] [-b | --browse] [-e [<length>] | --excerpt [<length>]]
-        [--filenames] [-f | --folders-first] [-g | --gui]
+        [--exclude-done] [--filenames] [-f | --folders-first] [-g | --gui]
         [-n <limit> | --limit <limit> | --<limit>] [--no-footer] [--no-header]
         [--no-id] [--no-indicator] [-p <number> | --page <number>] [--pager]
         [--paths] [-s | --sort] [-r | --reverse] [--tags]
@@ -7380,8 +7392,9 @@ Examples:
 
 ```text
 Usage:
-  nb list [-e [<length>] | --excerpt [<length>]] [--filenames]
-          [-f | --folders-first] [-n <limit> | --limit <limit> | --<limit>]
+  nb list [-e [<length>] | --excerpt [<length>]] [--exclude-done]
+          [--filenames] [-f | --folders-first]
+          [-n <limit> | --limit <limit> | --<limit>]
           [--no-id] [--no-indicator] [-p <number> | --page <number>] [--pager]
           [--paths] [-s | --sort] [-r | --reverse] [--tags]
           [-t <type> | --type <type> | --<type>]
@@ -7390,6 +7403,7 @@ Usage:
 Options:
   -e, --excerpt [<length>]        Print an excerpt <length> lines long under
                                   each note's filename [default: 3].
+  --exclude-done                  Exclude todos that are marked as done.
   --filenames                     Print the filename for each note.
   -f, --folders-first             Print folders before other items.
   -n, --limit <limit>, --<limit>  The maximum number of notes to list.
@@ -7459,7 +7473,7 @@ Examples:
 ```text
 Usage:
   nb ls [-a | --all] [-b | --browse] [-e [<length>] | --excerpt [<length>]]
-        [--filenames] [-f | --folders-first] [-g | --gui]
+        [--exclude-done] [--filenames] [-f | --folders-first] [-g | --gui]
         [-n <limit> | --limit <limit> | --<limit>] [--no-footer] [--no-header]
         [--no-id] [--no-indicator] [-p <number> | --page <number>] [--pager]
         [--paths] [-s | --sort] [-r | --reverse] [--tags]
@@ -7473,6 +7487,7 @@ Options:
                                   with `browse` in a terminal web browser.
   -e, --excerpt [<length>]        Print an excerpt <length> lines long under
                                   each note's filename [default: 3].
+  --exclude-done                  Exclude todos that are marked as done.
   --filenames                     Print the filename for each note.
   -f, --folders-first             Print folders before other items.
   -g, --gui                       Open the specified item or current notebook
@@ -7538,6 +7553,7 @@ Examples:
   nb ls "^Example.*"
   nb ls --10
   nb ls --type document
+  nb ls --exclude-done
   nb example:
   nb example: -ae
   nb example:ls

@@ -26,6 +26,53 @@ line four
 HEREDOC
 }
 
+# --exclude-done ##############################################################
+
+@test "'ls --exclude-done' excludes todos marked as done." {
+  {
+    "${_NB}" init
+
+    "${_NB}" add "Example File.md"  --content "Example content."
+    "${_NB}" todo add "Open todo."
+    "${_NB}" todo add "Done todo."
+    "${_NB}" todo add "Other open todo." --task "Task [x] one."
+
+    "${_NB}" do 3
+
+    export NB_FOOTER=0
+    export NB_HEADER=0
+  }
+
+  run "${_NB}" ls --exclude-done
+
+  printf "\${status}: '%s'\\n" "${status}"
+  printf "\${output}: '%s'\\n" "${output}"
+
+  [[ "${status}"    -eq 0 ]]
+  [[ "${#lines[@]}" -eq 3 ]]
+
+  [[ "${lines[0]}"  =~ .*[.*4.*].*\ ✔️\ \ .*\[\ \].*\ Other\ open\ todo\. ]]
+  [[ "${lines[1]}"  =~ .*[.*2.*].*\ ✔️\ \ .*\[\ \].*\ Open\ todo\.        ]]
+  [[ "${lines[2]}"  =~ .*[.*1.*].*\ Example\ File\.md                     ]]
+
+  run "${_NB}" ls --exclude-done --limit 1
+
+  printf "\${status}: '%s'\\n" "${status}"
+  printf "\${output}: '%s'\\n" "${output}"
+
+  [[ "${status}"    -eq 0                     ]]
+  [[ "${#lines[@]}" -eq 2                     ]]
+  [[ "${lines[1]}"  ==  "2 omitted. 3 total." ]]
+
+  run "${_NB}" ls 3 --exclude-done
+
+  printf "\${status}: '%s'\\n" "${status}"
+  printf "\${output}: '%s'\\n" "${output}"
+
+  [[ "${status}"    -eq 0                     ]]
+  [[ "${lines[0]}"  =~  Done\ todo\.          ]]
+}
+
 # folders first ###############################################################
 
 @test "'ls --folders-first' prints folders first while preserving pinning." {
