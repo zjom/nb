@@ -70,7 +70,10 @@
           installPhase = ''
             runHook preInstall
 
-            install -Dm755 nb $out/bin/nb
+            # nb takes its name from `basename $0`, and wrapProgram would rename
+            # the script to .nb-wrapped. Keep the script named nb in libexec and
+            # put the wrapper in bin.
+            install -Dm755 nb $out/libexec/nb/nb
 
             installShellCompletion --cmd nb \
               --bash etc/nb-completion.bash \
@@ -82,7 +85,7 @@
 
           # git is required; suffix so the user's own tools take precedence.
           postFixup = ''
-            wrapProgram $out/bin/nb \
+            makeWrapper $out/libexec/nb/nb $out/bin/nb \
               --suffix PATH : ${lib.makeBinPath [ git ]} ${settingsArgs}
           '';
 
