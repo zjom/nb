@@ -4,3 +4,4 @@ nb.*
 !nb.ksh
 !nb.zsh
 tmp
+result
